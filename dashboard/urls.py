@@ -16,6 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+from graphs import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('wait_for_results/<int:obj_pk>', views.redirect_back_to_admin)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

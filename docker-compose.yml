@@ -1,0 +1,49 @@
+version: "3"
+services:
+  web:
+    build: .
+    command: bash -c "python ./manage.py migrate --noinput && python ./manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+      - celery
+    restart: always
+
+  celery:
+    build: .
+    command: celery -A dashboard worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+      - highcharts
+    restart: always
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  rabbitmq:
+    image: rabbitmq:alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  redis:
+    image: redis:alpine
+
+  highcharts:
+    image: onsdigital/highcharts-export-node
+
