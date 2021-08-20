@@ -1,5 +1,16 @@
 # Dashboard
 
+## About The Project
+Dashboard for plotting functions using admin panel
+
+## Built With
+- **Django** for backend
+- **Celery** as a task execution backend
+- **Postgres** 
+- **RabbitMQ** as a broker for Celery
+- **Redis** as a backend for results for Celery
+- **Highcharts** for rendering charts
+
 ## How to run
 
 1. clone this repo
